@@ -33,6 +33,7 @@ public class BoardServiceImpl implements BoardService {
     public Optional<KBBoard> remove(Long boardId) {
         final Optional<KBBoard> board = boardRepository.findById(boardId);
         boardRepository.delete(board.orElse(null));
+        System.out.println("test");
         return board;
     }
 }
