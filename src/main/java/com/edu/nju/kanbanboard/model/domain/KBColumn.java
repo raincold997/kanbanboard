@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,5 +32,11 @@ public class KBColumn implements Serializable {
     private KBBoard kbBoard;
 
     @OneToMany(mappedBy = "kbColumn",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<KBCard> cards;
+    private List<KBCard> cards = new ArrayList<>();
+
+    @JsonIgnore
+    private int columnFlag;
+
+    @JsonIgnore
+    private int cardsFlag;
 }

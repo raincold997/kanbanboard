@@ -21,6 +21,8 @@ public class KBLogs implements Serializable {
 
     private Long userId;
 
+    private Long boardId;
+
     @NotBlank(message = "操作内容不能为空")
     private String logContent;
 

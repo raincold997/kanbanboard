@@ -27,4 +27,6 @@ public class KBCard implements Serializable {
     @JoinColumn(name = "column_id")
     @JsonIgnore
     private KBColumn kbColumn;
+
+    private Long creatorId;
 }

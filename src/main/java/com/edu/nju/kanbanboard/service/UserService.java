@@ -11,4 +11,5 @@ public interface UserService {
     KBUser findByName(String name);
 
     void update(KBUser user);
+
 }

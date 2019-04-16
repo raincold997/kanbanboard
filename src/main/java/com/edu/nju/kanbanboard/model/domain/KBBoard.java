@@ -26,6 +26,8 @@ public class KBBoard implements Serializable {
     @JsonIgnore
     private List<KBUser> kbUsers = new ArrayList<>();
 
+    private Long ownerId;
+
     @NotBlank(message = "看板名称不能为空")
     private String boardName;
 }
