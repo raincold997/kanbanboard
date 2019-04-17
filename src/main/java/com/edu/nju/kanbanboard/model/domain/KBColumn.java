@@ -23,6 +23,7 @@ public class KBColumn implements Serializable {
     @NotEmpty(message = "列名称不能为空")
     private String columnName;
 
+    @JsonIgnore
     @Column(nullable = false)
     private int columnOrder;
 

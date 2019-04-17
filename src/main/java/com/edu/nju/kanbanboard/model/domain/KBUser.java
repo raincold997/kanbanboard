@@ -2,6 +2,7 @@ package com.edu.nju.kanbanboard.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "kb_user")
+@Proxy(lazy = false)
 public class KBUser implements Serializable {
 
     private static final long serialVersionUID = -6374049601385640924L;
@@ -24,6 +26,7 @@ public class KBUser implements Serializable {
     @NotBlank(message = "用户名不能为空")
     private String userName;
 
+    @NotBlank(message = "密码不能为空")
     @JsonIgnore
     private String userPass;
 
@@ -31,7 +34,7 @@ public class KBUser implements Serializable {
     @Email(message = "邮箱格式不正确")
     private String userEmail;
 
-    @ManyToMany( cascade = CascadeType.PERSIST)
+    @ManyToMany( cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinTable(name = "kb_user_board",
             joinColumns = {@JoinColumn(name = "user_id",nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "board_id",nullable = false)})

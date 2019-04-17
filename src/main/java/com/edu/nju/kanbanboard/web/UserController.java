@@ -28,8 +28,8 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @LoggerManager(description = "登陆")
-    public JsonResult getLogin(@ModelAttribute("loginName")String name,
-                            @ModelAttribute("loginPwd")String pwd,
+    public JsonResult getLogin(@ModelAttribute("email")String name,
+                            @ModelAttribute("password")String pwd,
                             HttpSession session){
         final KBUser user = userService.findByEmail(name);
         if(user == null){
@@ -41,9 +41,9 @@ public class UserController extends BaseController {
         return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"登录成功");
     }
 
-    @RequestMapping(value = "/regist",method = RequestMethod.POST)
+    @RequestMapping(value = "/register",method = RequestMethod.POST)
     @LoggerManager(description = "注册")
-    public JsonResult regist(@Valid KBUser user, BindingResult bindingResult){
+    public JsonResult register(@Valid KBUser user, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             for(ObjectError error:bindingResult.getAllErrors()){
                 return new JsonResult(ResultCodeEnum.FAIL.getCode(),error.getDefaultMessage());
