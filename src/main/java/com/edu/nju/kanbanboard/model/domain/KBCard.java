@@ -31,4 +31,17 @@ public class KBCard implements Serializable {
     private KBColumn kbColumn;
 
     private Long creatorId;
+
+    @Override
+    public boolean equals(Object x){
+        if(this == x)return true;
+        if(x == null)return false;
+        if(this.getClass() != x.getClass()) return false;
+        KBCard that = (KBCard)x;
+
+        if(!this.cardId.equals(that.cardId)) return false;
+        return true;
+    }
+
+
 }

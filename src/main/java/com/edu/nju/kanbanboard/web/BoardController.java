@@ -53,23 +53,11 @@ public class BoardController {
     public Map<Long,String> getBoardListByUser(@PathVariable("userId") Long userId) {
         List<KBBoard> ownerBoards = boardService.getByOwnerId(userId);
         List<KBBoard> userBoards = userService.getBoardList(userId);
-        List<KBBoard> resultBoards = new ArrayList<>();
         if (ownerBoards != null && ownerBoards.size() != 0 && userBoards != null) {
-            for(KBBoard first:userBoards){
-                boolean flag = true;
-                for(KBBoard second:ownerBoards){
-                    if(first.getBoardId().equals(second.getBoardId())){
-                        flag = false;
-                        break;
-                    }
-                }
-                if(flag){
-                    resultBoards.add(first);
-                }
-            }
+            userBoards.removeAll(ownerBoards);
         }
         if (userBoards != null && userBoards.size() != 0) {
-            Map<Long, String> userBoardMap = resultBoards.stream().collect(Collectors.toMap(KBBoard::getBoardId, KBBoard::getBoardName));
+            Map<Long, String> userBoardMap = userBoards.stream().collect(Collectors.toMap(KBBoard::getBoardId, KBBoard::getBoardName));
             return userBoardMap;
         }
         return null;

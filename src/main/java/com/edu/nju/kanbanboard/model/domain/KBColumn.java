@@ -42,4 +42,14 @@ public class KBColumn implements Serializable {
 
     @JsonIgnore
     private int cardsFlag;
+
+    @Override
+    public boolean equals(Object x){
+        if(this == x)return true;
+        if(x == null)return false;
+        if(this.getClass() != x.getClass())return false;
+        KBColumn that = (KBColumn)x;
+
+        return this.columnId.equals(that.columnId);
+    }
 }

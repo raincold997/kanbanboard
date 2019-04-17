@@ -32,4 +32,14 @@ public class KBBoard implements Serializable {
 
     @NotBlank(message = "看板名称不能为空")
     private String boardName;
+
+    @Override
+    public boolean equals(Object x){
+        if(this == x)return true;
+        if(x == null)return false;
+        if(this.getClass() != x.getClass())return false;
+        KBBoard that = (KBBoard)x;
+
+        return this.boardId.equals(that.boardId);
+    }
 }
