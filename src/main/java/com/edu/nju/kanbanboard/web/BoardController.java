@@ -8,15 +8,20 @@ import com.edu.nju.kanbanboard.model.dto.JsonResult;
 import com.edu.nju.kanbanboard.model.enums.ResultCodeEnum;
 import com.edu.nju.kanbanboard.service.BoardService;
 import com.edu.nju.kanbanboard.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/kanbans")
 public class BoardController {
@@ -28,11 +33,12 @@ public class BoardController {
     @GetMapping("/owner/{ownerId}")
     @LoggerManager(description = "获取OWNER看板")
     public Map<Long,String> getBoardListByOwner(@PathVariable("ownerId") Long ownerId){
-        List<KBBoard> boardList = null;
+        List<KBBoard> boardList ;
         Map<Long,String> ownerBoardMap;
         try {
             boardList = boardService.getByOwnerId(ownerId);
         }catch (Exception e){
+            log.debug(e.getMessage());
             return null;
         }
         if(boardList != null && boardList.size() != 0){
@@ -47,12 +53,23 @@ public class BoardController {
     public Map<Long,String> getBoardListByUser(@PathVariable("userId") Long userId) {
         List<KBBoard> ownerBoards = boardService.getByOwnerId(userId);
         List<KBBoard> userBoards = userService.getBoardList(userId);
+        List<KBBoard> resultBoards = new ArrayList<>();
         if (ownerBoards != null && ownerBoards.size() != 0 && userBoards != null) {
-            //TODO
-            userBoards.removeAll(ownerBoards);
+            for(KBBoard first:userBoards){
+                boolean flag = true;
+                for(KBBoard second:ownerBoards){
+                    if(first.getBoardId().equals(second.getBoardId())){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag){
+                    resultBoards.add(first);
+                }
+            }
         }
         if (userBoards != null && userBoards.size() != 0) {
-            Map<Long, String> userBoardMap = userBoards.stream().collect(Collectors.toMap(KBBoard::getBoardId, KBBoard::getBoardName));
+            Map<Long, String> userBoardMap = resultBoards.stream().collect(Collectors.toMap(KBBoard::getBoardId, KBBoard::getBoardName));
             return userBoardMap;
         }
         return null;
@@ -67,21 +84,10 @@ public class BoardController {
         }
         try{
             KBUser user = userService.findById(ownerId);
-            //set owner
             user.getKbBoards().add(board);
             board.setOwnerId(ownerId);
-            //set column
-            List<KBColumn> columns = board.getColumns();
-            int columnOrder = 1;
-            for(KBColumn column:columns){
-                column.setKbBoard(board);
-                column.setColumnFlag(1);
-                column.setCardsFlag(1);
-                column.setColumnOrder(columnOrder);
-                columnOrder++;
-            }
+            boardService.create(board);
             userService.update(user);
-            boardService.update(board);
             return new JsonResult((ResultCodeEnum.SUCCESS.getCode()),"创建成功");
         }catch (Exception e){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
@@ -92,7 +98,24 @@ public class BoardController {
     @LoggerManager(description = "删除看板")
     public JsonResult deleteBoard(@PathVariable("ownerId")Long ownerId,@PathVariable("kanbanId")Long kanbanId){
         KBBoard deleteBoard = boardService.findById(kanbanId);
-        //TODO
-        return new JsonResult();
+        if(deleteBoard == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"未发现对应看板");
+        }
+        else if(!deleteBoard.getOwnerId().equals(ownerId)){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"用户没有对应权限");
+        }
+        try {
+            List<Long> userIdList = deleteBoard.getKbUsers().stream().map(KBUser::getUserId).collect(Collectors.toList());
+            //remove board from all the user
+            for (Long userId : userIdList) {
+                userService.deleteBoard(userId, kanbanId);
+            }
+            //remove the board
+            boardService.remove(kanbanId);
+        }catch (Exception e){
+            log.debug(e.getMessage());
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
+        }
+        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"成功删除看板");
     }
 }

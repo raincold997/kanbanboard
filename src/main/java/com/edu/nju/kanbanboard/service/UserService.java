@@ -19,4 +19,6 @@ public interface UserService {
 
     List<KBBoard> getBoardList(Long userId);
 
+    void deleteBoard(Long userId,Long boardId);
+
 }

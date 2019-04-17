@@ -2,6 +2,7 @@ package com.edu.nju.kanbanboard.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "kb_card")
+@Proxy(lazy = false)
 public class KBCard implements Serializable {
 
     private static final long serialVersionUID = -6993212498916368968L;

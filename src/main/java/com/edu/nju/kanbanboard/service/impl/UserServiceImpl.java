@@ -7,6 +7,7 @@ import com.edu.nju.kanbanboard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,5 +47,18 @@ public class UserServiceImpl implements UserService {
             return user.getKbBoards();
         }
         return null;
+    }
+
+    @Override
+    public void deleteBoard(Long userId, Long boardId) {
+        KBUser user = userRepository.getOne(userId);
+        List<KBBoard> newBoards = new ArrayList<>();
+        for(KBBoard board:user.getKbBoards()){
+            if(!board.getBoardId().equals(boardId)){
+                newBoards.add(board);
+            }
+        }
+        user.setKbBoards(newBoards);
+        userRepository.save(user);
     }
 }

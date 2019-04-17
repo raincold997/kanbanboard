@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface BoardService {
 
-    //void create(KBBoard board);
+    void create(KBBoard board);
 
     void update(KBBoard board);
 

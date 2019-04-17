@@ -30,7 +30,7 @@ public class BoardDelete {
         List<KBBoard> newBoards = new ArrayList<>();
         for(KBBoard sboard:user.getKbBoards()){
             if(sboard.getBoardId().intValue() != 1){
-                newBoards.add(board);
+                newBoards.add(sboard);
             }
         }
 

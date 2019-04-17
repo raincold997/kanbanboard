@@ -2,6 +2,7 @@ package com.edu.nju.kanbanboard.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name="kb_column")
+@Proxy(lazy = false)
 public class KBColumn implements Serializable {
 
     private static final long serialVersionUID = -1531781243773680003L;
