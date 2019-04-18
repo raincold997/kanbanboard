@@ -2,7 +2,6 @@ package com.edu.nju.kanbanboard.web;
 
 import com.edu.nju.kanbanboard.comm.aop.LoggerManager;
 import com.edu.nju.kanbanboard.model.domain.KBBoard;
-import com.edu.nju.kanbanboard.model.domain.KBColumn;
 import com.edu.nju.kanbanboard.model.domain.KBUser;
 import com.edu.nju.kanbanboard.model.dto.JsonResult;
 import com.edu.nju.kanbanboard.model.enums.ResultCodeEnum;
@@ -14,11 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Slf4j

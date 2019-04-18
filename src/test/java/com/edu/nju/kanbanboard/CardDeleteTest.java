@@ -51,16 +51,28 @@ public class CardDeleteTest {
     @Test
     public void deleteOne(){
         KBColumn column = columnRepository.findByColumnName("test");
-        KBCard card = cardRepository.findByCardTitle("test3");
+        //KBCard card = cardRepository.findByCardTitle("test1");
         //System.out.println(card.getCardTitle());
-        boolean flag = column.getCards().remove(card);
-        System.out.println(flag);
+        //boolean flag = column.getCards().remove(card);
+        //System.out.println(flag);
         //System.out.println(column.getCards().size());
 
-        card.setKbColumn(null);
-        cardRepository.save(card);
-        cardRepository.delete(card);
+        //card.setKbColumn(null);
+        //cardRepository.save(card);
+        //cardRepository.delete(card);
         //columnRepository.save(column);
         //columnRepository.delete(column);
+        System.out.println(column.getCards().size());
+    }
+
+    @Test
+    public void addOne(){
+        KBColumn column = columnRepository.findByColumnName("test");
+        KBCard card1 =new KBCard();
+        card1.setCardTitle("test1");
+        card1.setCardDescription("11");
+        card1.setKbColumn(column);
+        column.getCards().add(card1);
+        columnRepository.save(column);
     }
 }

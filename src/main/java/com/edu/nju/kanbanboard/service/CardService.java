@@ -7,4 +7,9 @@ public interface CardService {
 
     void update(KBCard card);
 
+    KBCard getById(Long cardId);
+
+    void deleteCard(Long cardId);
+
+
 }

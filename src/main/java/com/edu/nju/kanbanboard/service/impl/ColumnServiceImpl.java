@@ -27,6 +27,11 @@ public class ColumnServiceImpl implements ColumnService {
     }
 
     @Override
+    public KBColumn getById(Long columnId) {
+        return columnRepository.getOne(columnId);
+    }
+
+    @Override
     public Optional<KBColumn> delete(Long columnId) {
         final Optional<KBColumn> column = columnRepository.findById(columnId);
         columnRepository.delete(column.orElse(null));

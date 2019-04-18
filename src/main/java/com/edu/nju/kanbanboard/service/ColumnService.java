@@ -10,6 +10,8 @@ public interface ColumnService {
 
     void update(KBColumn column);
 
+    KBColumn getById(Long columnId);
+
     Optional<KBColumn> delete(Long columnId);
 
     List<KBColumn> resortColumn(List<KBColumn> columns,int order);

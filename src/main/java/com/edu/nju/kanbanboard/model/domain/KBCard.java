@@ -7,6 +7,7 @@ import org.hibernate.annotations.Proxy;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
@@ -30,7 +31,11 @@ public class KBCard implements Serializable {
     @JsonIgnore
     private KBColumn kbColumn;
 
+    private String color;
+
     private Long creatorId;
+
+    private Date updateDate;
 
     @Override
     public boolean equals(Object x){
