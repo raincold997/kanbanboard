@@ -37,7 +37,7 @@ public class SecurityFilter implements Filter {
                 return;
             }else{
                 logger.debug("security filter,deny "+request.getRequestURI());
-                String html = "<script type=\"text/javascript\">window.location.href=\"_BP_login\"</script>";
+                String html = "<script type=\"text/javascript\">window.location.href=\"_BP_user/\"</script>";
                 html = html.replace("_BP_",Const.BASE_PATH);
                 servletResponse.getWriter().write(html);
             }

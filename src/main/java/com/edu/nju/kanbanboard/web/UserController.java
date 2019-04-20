@@ -26,6 +26,17 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("/")
+    @LoggerManager(description = "主页面")
+    public JsonResult mainPage(HttpSession session){
+        if(session.getAttribute(Const.LOGIN_SESSION_KEY) == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"请先登录");
+        }else{
+            return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"登录",session.getAttribute(Const.LOGIN_SESSION_KEY));
+        }
+    }
+
+
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @LoggerManager(description = "登陆")
     public JsonResult getLogin(@ModelAttribute("email")String name,
