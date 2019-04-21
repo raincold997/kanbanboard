@@ -12,11 +12,15 @@ public interface ColumnService {
 
     KBColumn getById(Long columnId);
 
-    Optional<KBColumn> delete(Long columnId);
+    void delete(Long columnId);
 
     List<KBColumn> resortColumn(List<KBColumn> columns,int order);
 
+    void moveColumns(List<Long> orderList);
+
     boolean getColumnAuthority(Long ColumnId);
 
-    void relaseColumnAuthority(Long ColumnId);
+    void releaseColumnAuthority(Long ColumnId);
+
+
 }

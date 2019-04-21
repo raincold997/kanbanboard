@@ -32,10 +32,11 @@ public class ColumnServiceImpl implements ColumnService {
     }
 
     @Override
-    public Optional<KBColumn> delete(Long columnId) {
-        final Optional<KBColumn> column = columnRepository.findById(columnId);
-        columnRepository.delete(column.orElse(null));
-        return column;
+    public void delete(Long columnId) {
+        KBColumn column = columnRepository.getOne(columnId);
+        column.setKbBoard(null);
+        columnRepository.save(column);
+        columnRepository.delete(column);
     }
 
     @Override
@@ -48,8 +49,16 @@ public class ColumnServiceImpl implements ColumnService {
                 column.setColumnOrder(column.getColumnOrder()+flag);
             }
         }
-
         return columns;
+    }
+
+    @Override
+    public void moveColumns(List<Long> orderList) {
+        for(int i = 0;i<orderList.size();i++){
+            KBColumn column = columnRepository.getOne(orderList.get(i));
+            column.setColumnOrder(i+1);
+            columnRepository.save(column);
+        }
     }
 
     @Override
@@ -67,7 +76,7 @@ public class ColumnServiceImpl implements ColumnService {
     }
 
     @Override
-    public void relaseColumnAuthority(Long ColumnId) {
+    public void releaseColumnAuthority(Long ColumnId) {
         Optional<KBColumn> column = columnRepository.findById(ColumnId);
         if(column.isPresent()){
             column.get().setColumnFlag(0);

@@ -59,6 +59,16 @@ public class BoardController {
         return null;
     }
 
+    @GetMapping("/{kanbanId}")
+    @LoggerManager(description = "获取单个看板")
+    public JsonResult getBoard(@PathVariable("kanbanId")Long boardId){
+        KBBoard board = boardService.findById(boardId);
+        if(board == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
+        }
+        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"获取看板成功",board);
+    }
+
     @PostMapping("/kanban/{ownerId}")
     @LoggerManager(description = "创建看板")
     public JsonResult createBoard(@Valid KBBoard board, BindingResult bindingResult,@PathVariable("ownerId")Long ownerId){
