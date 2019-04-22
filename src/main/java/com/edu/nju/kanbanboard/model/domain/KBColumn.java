@@ -29,6 +29,8 @@ public class KBColumn implements Serializable {
     @Column(nullable = false)
     private int columnOrder;
 
+    private int columnWIP;
+
     @ManyToOne(targetEntity = KBBoard.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "board_id")
     @JsonIgnore
