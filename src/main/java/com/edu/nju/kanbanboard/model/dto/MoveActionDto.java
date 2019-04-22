@@ -10,6 +10,6 @@ public class MoveActionDto {
 
     private Long targetLaneId;
 
-    private Long useId;
+    private Long userId;
 
 }

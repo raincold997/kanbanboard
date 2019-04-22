@@ -61,4 +61,9 @@ public class UserServiceImpl implements UserService {
         user.setKbBoards(newBoards);
         userRepository.save(user);
     }
+
+    @Override
+    public String getNameById(Long userId) {
+        return userRepository.findNameById(userId);
+    }
 }

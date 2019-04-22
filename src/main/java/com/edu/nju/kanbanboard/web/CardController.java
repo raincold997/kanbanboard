@@ -10,6 +10,7 @@ import com.edu.nju.kanbanboard.model.enums.ResultCodeEnum;
 import com.edu.nju.kanbanboard.service.BoardService;
 import com.edu.nju.kanbanboard.service.CardService;
 import com.edu.nju.kanbanboard.service.ColumnService;
+import com.edu.nju.kanbanboard.service.LogsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -31,9 +32,12 @@ public class CardController {
     @Autowired
     private BoardService boardService;
 
-    @PostMapping("/create/{laneId}")
+    @Autowired
+    private LogsService logsService;
+
+    @PostMapping("/create/{kanbanId}/{laneId}")
     @LoggerManager(description = "新建卡片")
-    public JsonResult createCard(@PathVariable("laneId")Long columnId, @Valid KBCard card, BindingResult bindingResult){
+    public JsonResult createCard(@PathVariable("kanbanId")Long boardId,@PathVariable("laneId")Long columnId, @Valid KBCard card, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
@@ -41,21 +45,25 @@ public class CardController {
             KBColumn column = columnService.getById(columnId);
             card.setKbColumn(column);
             cardService.create(card);
+            logsService.createCardLog(card.getCreatorId(),boardId,card.getCardTitle());
             return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"添加卡片成功");
         }catch (Exception e){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
         }
     }
 
-    @DeleteMapping("/delete/{cardId}")
+    @DeleteMapping("/delete/{kanbanId}/{cardId}/{userId}")
     @LoggerManager(description = "删除卡片")
-    public JsonResult deleteCard(@PathVariable("cardId")Long cardId){
+    public JsonResult deleteCard(@PathVariable("kanbanId")Long boardId
+                                ,@PathVariable("cardId")Long cardId
+                                ,@PathVariable("userId")Long userId){
         KBCard deleteCard = cardService.getById(cardId);
         if(deleteCard == null){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"未发现对应卡片");
         }
         try{
             cardService.deleteCard(cardId);
+            logsService.deleteCardLog(userId,boardId,deleteCard.getCardTitle());
             return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"成功删除");
         }catch (Exception e){
             log.debug(e.getMessage());
@@ -76,6 +84,7 @@ public class CardController {
                 if(sourceColumn.getCards().contains(moveCard)){
                     moveCard.setKbColumn(targetColumn);
                     cardService.update(moveCard);
+                    logsService.moveCardLog(moveActionDto.getUserId(),boardId,moveCard.getCardTitle(),sourceColumn.getColumnName(),targetColumn.getColumnName());
                     return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"移动成功");
                 }
                 return new JsonResult(ResultCodeEnum.FAIL.getCode(),"源列中不存在这张卡片");

@@ -36,6 +36,7 @@ public class CardServiceImpl implements CardService {
         card.setKbColumn(null);
         cardRepository.save(card);
         cardRepository.delete(card);
+
     }
 
 

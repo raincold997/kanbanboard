@@ -21,4 +21,6 @@ public interface UserService {
 
     void deleteBoard(Long userId,Long boardId);
 
+    String getNameById(Long userId);
+
 }
