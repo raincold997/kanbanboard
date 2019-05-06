@@ -22,6 +22,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void update(KBCard card) {
+        card.setUpdateDate(new Date());
         cardRepository.save(card);
     }
 

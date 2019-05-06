@@ -37,7 +37,7 @@ public class CardController {
 
     @PostMapping("/create/{kanbanId}/{laneId}")
     @LoggerManager(description = "新建卡片")
-    public JsonResult createCard(@PathVariable("kanbanId")Long boardId,@PathVariable("laneId")Long columnId, @Valid KBCard card, BindingResult bindingResult){
+    public JsonResult createCard(@PathVariable("kanbanId")Long boardId,@PathVariable("laneId")Long columnId,@RequestBody @Valid KBCard card, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
@@ -73,7 +73,7 @@ public class CardController {
 
     @PutMapping("/move/{kanbanId}")
     @LoggerManager(description = "移动卡片")
-    public JsonResult moveCard(@PathVariable("kanbanId") Long boardId, MoveActionDto moveActionDto){
+    public JsonResult moveCard(@PathVariable("kanbanId") Long boardId, @RequestBody MoveActionDto moveActionDto){
         KBBoard board = boardService.findById(boardId);
         KBColumn sourceColumn = columnService.getById(moveActionDto.getSourceLaneId());
         KBColumn targetColumn = columnService.getById(moveActionDto.getTargetLaneId());
@@ -82,10 +82,13 @@ public class CardController {
             List<KBColumn> columns = board.getColumns();
             if(columns.contains(sourceColumn)&&columns.contains(targetColumn)){
                 if(sourceColumn.getCards().contains(moveCard)){
-                    moveCard.setKbColumn(targetColumn);
-                    cardService.update(moveCard);
-                    logsService.moveCardLog(moveActionDto.getUserId(),boardId,moveCard.getCardTitle(),sourceColumn.getColumnName(),targetColumn.getColumnName());
-                    return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"移动成功");
+                    if(!moveActionDto.getVersion().before(moveCard.getUpdateDate())){
+                        moveCard.setKbColumn(targetColumn);
+                        cardService.update(moveCard);
+                        logsService.moveCardLog(moveActionDto.getUserId(),boardId,moveCard.getCardTitle(),sourceColumn.getColumnName(),targetColumn.getColumnName());
+                        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"移动成功");
+                    }
+                    return new JsonResult(ResultCodeEnum.FAIL.getCode(),"已经有人修改了这张卡片");
                 }
                 return new JsonResult(ResultCodeEnum.FAIL.getCode(),"源列中不存在这张卡片");
             }

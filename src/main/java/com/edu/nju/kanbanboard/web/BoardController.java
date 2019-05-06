@@ -71,7 +71,7 @@ public class BoardController {
 
     @PostMapping("/kanban/{ownerId}")
     @LoggerManager(description = "创建看板")
-    public JsonResult createBoard(@Valid KBBoard board, BindingResult bindingResult,@PathVariable("ownerId")Long ownerId){
+    public JsonResult createBoard(@RequestBody @Valid KBBoard board, BindingResult bindingResult,@PathVariable("ownerId")Long ownerId){
         if(bindingResult.hasErrors()){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),
                     bindingResult.getAllErrors().get(0).getDefaultMessage());

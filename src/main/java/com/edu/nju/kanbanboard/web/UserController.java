@@ -4,6 +4,7 @@ import com.edu.nju.kanbanboard.comm.Const;
 import com.edu.nju.kanbanboard.comm.aop.LoggerManager;
 import com.edu.nju.kanbanboard.model.domain.KBUser;
 import com.edu.nju.kanbanboard.model.dto.JsonResult;
+import com.edu.nju.kanbanboard.model.dto.LoginInfoDto;
 import com.edu.nju.kanbanboard.model.enums.ResultCodeEnum;
 import com.edu.nju.kanbanboard.service.UserService;
 import com.edu.nju.kanbanboard.web.base.BaseController;
@@ -11,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -39,22 +37,21 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @LoggerManager(description = "登陆")
-    public JsonResult getLogin(@ModelAttribute("email")String name,
-                            @ModelAttribute("password")String pwd,
+    public JsonResult getLogin(@RequestBody LoginInfoDto loginInfoDto,
                             HttpSession session){
-        final KBUser user = userService.findByEmail(name);
+        final KBUser user = userService.findByEmail(loginInfoDto.getEmail());
         if(user == null){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"登录账号不存在");
-        }else if(!user.getUserPass().equals(getPwd(pwd))){
+        }else if(!user.getUserPass().equals(getPwd(loginInfoDto.getPassword()))){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"登录密码错误");
         }
         session.setAttribute(Const.LOGIN_SESSION_KEY,user);
-        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"登录成功");
+        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"登录成功",user);
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     @LoggerManager(description = "注册")
-    public JsonResult register(@Valid KBUser user, BindingResult bindingResult){
+    public JsonResult register(@RequestBody @Valid KBUser user, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             for(ObjectError error:bindingResult.getAllErrors()){
                 return new JsonResult(ResultCodeEnum.FAIL.getCode(),error.getDefaultMessage());
