@@ -54,7 +54,7 @@ public class OwnerBoardTest {
 
     @Test
     public void CreateBoard(){
-        Long userId = new Long("2");
+        Long userId = new Long("1");
         KBUser user = userService.findById(userId);
 
         KBBoard newboard = new KBBoard();
@@ -69,5 +69,12 @@ public class OwnerBoardTest {
 
 //        List<KBBoard> boards = user.getKbBoards();
 //        System.out.println(boards.size());
+    }
+
+    @Test
+    public void CreateBoardWithColorList(){
+        KBBoard newboard = new KBBoard();
+        newboard.setBoardName("testColorList");
+        boardService.create(newboard);
     }
 }

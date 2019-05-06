@@ -31,6 +31,12 @@ public class LogsServiceImpl implements LogsService {
     }
 
     @Override
+    public void modifyCardLog(Long userId, Long boardId,String cardTitle) {
+        String content = "修改了卡片："+cardTitle;
+        saveLog(content,userId,boardId);
+    }
+
+    @Override
     public void moveCardLog(Long userId, Long boardId, String cardTitle, String sourceColumn, String targetColumn) {
         String content = "将卡片："+cardTitle+" 从列："+sourceColumn+" 移动到列："+targetColumn;
         saveLog(content,userId,boardId);

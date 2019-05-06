@@ -97,4 +97,27 @@ public class CardController {
         return new JsonResult(ResultCodeEnum.FAIL.getCode(),"指定的看板或者列不存在");
     }
 
+    @PutMapping("/modify/{kanbanId}/{cardId}/{userId}")
+    @LoggerManager(description = "修改卡片信息")
+    public JsonResult modify(@PathVariable("kanbanId")Long boardId,
+                             @PathVariable("cardId")Long carId,
+                             @PathVariable("userId")Long userId,
+                             @RequestBody @Valid KBCard card,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
+        KBCard modifyCard = cardService.getById(carId);
+        if(modifyCard == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"卡片不存在");
+        }
+        try{
+            cardService.moidfyCard(card,modifyCard);
+            logsService.modifyCardLog(userId,boardId,card.getCardTitle());
+            return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"卡片信息修改成功");
+        }catch (Exception e){
+            log.debug(e.getMessage());
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
+        }
+    }
+
 }

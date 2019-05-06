@@ -15,7 +15,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void create(KBCard card) {
-        card.setColor("Green");
+        card.setIsBlocked(0);
         card.setUpdateDate(new Date());
         cardRepository.save(card);
     }
@@ -38,6 +38,16 @@ public class CardServiceImpl implements CardService {
         cardRepository.save(card);
         cardRepository.delete(card);
 
+    }
+
+    @Override
+    public void moidfyCard(KBCard cardInfo, KBCard modifyCard) {
+        modifyCard.setCardTitle(cardInfo.getCardTitle());
+        modifyCard.setCardDescription(cardInfo.getCardDescription());
+        modifyCard.setColor(cardInfo.getColor());
+        modifyCard.setScale(cardInfo.getScale());
+        modifyCard.setIsBlocked(0);
+        update(modifyCard);
     }
 
 

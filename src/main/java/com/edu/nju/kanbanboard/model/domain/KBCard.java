@@ -5,7 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -31,11 +31,28 @@ public class KBCard implements Serializable {
     @JsonIgnore
     private KBColumn kbColumn;
 
+    //卡片颜色
     private String color;
 
+    //创建者ID
     private Long creatorId;
 
+    //创建者姓名，用于卡片展示
+    private String creatorName;
+
+    //更新日期
     private Date updateDate;
+
+    //是否阻塞,更新日期超过2日没有被完成
+    private int isBlocked;
+
+    //工作截至日期
+    private Date deadline;
+
+    //工作规模,1~9
+    @Max(9)
+    @Min(1)
+    private int scale;
 
     @Override
     public boolean equals(Object x){

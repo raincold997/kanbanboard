@@ -2,6 +2,7 @@ package com.edu.nju.kanbanboard.web;
 
 import com.edu.nju.kanbanboard.comm.aop.LoggerManager;
 import com.edu.nju.kanbanboard.model.domain.KBBoard;
+import com.edu.nju.kanbanboard.model.domain.KBColorList;
 import com.edu.nju.kanbanboard.model.domain.KBUser;
 import com.edu.nju.kanbanboard.model.dto.JsonResult;
 import com.edu.nju.kanbanboard.model.enums.ResultCodeEnum;
@@ -111,5 +112,89 @@ public class BoardController {
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
         }
         return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"成功删除看板");
+    }
+
+    @PutMapping("/board/name/{kanbanId}/{userId}")
+    @LoggerManager(description = "修改看板名称")
+    public JsonResult renameBoard(@PathVariable("kanbanId")Long boardId,@PathVariable("userId")Long ownerId,@RequestBody String newName){
+        KBBoard board = boardService.findById(boardId);
+        if(board == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"未发现对应看板");
+        }
+        if(!board.getOwnerId().equals(ownerId)){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"用户没有对应权限");
+        }
+        try{
+            board.setBoardName(newName);
+            boardService.update(board);
+            return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"修改看板名称成功");
+        }catch (Exception e){
+            log.debug(e.getMessage());
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
+        }
+    }
+
+    @PutMapping("/board/color/{kanbanId}/{userId}")
+    @LoggerManager(description = "修改颜色列表")
+    public JsonResult modifyColorList(@PathVariable("kanbanId")Long boardId, @PathVariable("userId")Long ownerId, @RequestBody KBColorList colorList){
+        KBColorList modifyColorList = boardService.getColorListById(boardId);
+        if(modifyColorList ==  null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
+        }
+        if(!ownerId.equals(boardService.getOwnerId(boardId))){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"用户没有对应权限");
+        }
+        try {
+            colorList.setBoardId(boardId);
+            boardService.updateColorList(colorList);
+            return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"修改颜色列表成功");
+        }catch (Exception e){
+            log.debug(e.getMessage());
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
+        }
+    }
+
+    @PostMapping("/user/add/{kanbanId}/{userId}")
+    @LoggerManager(description = "看板添加用户")
+    public JsonResult addUser(@PathVariable("kanbanId")Long boardId,@PathVariable("userId")Long ownerId,@RequestParam String targetEmail){
+        KBBoard board = boardService.findById(boardId);
+        if(board == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
+        }
+        if(!ownerId.equals(board.getOwnerId())){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"用户没有权限");
+        }
+        try{
+            KBUser user = userService.findByEmail(targetEmail);
+            user.getKbBoards().add(board);
+            board.getKbUsers().add(user);
+            boardService.update(board);
+            userService.update(user);
+            return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"添加用户成功");
+        }catch (Exception e){
+            log.debug(e.getMessage());
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
+        }
+    }
+
+    @DeleteMapping("/user/delete/{kanbanId}/{userId}")
+    @LoggerManager(description = "看板删除用户")
+    public JsonResult deleteUser(@PathVariable("kanbanId")Long boardId,@PathVariable("userId")Long ownerId,@RequestParam Long targetId){
+        KBBoard board = boardService.findById(boardId);
+        if(board == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"对应看板不存在");
+        }
+        if(!ownerId.equals(board.getOwnerId())){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"用户没有权限");
+        }
+        try{
+            KBUser user = userService.findById(targetId);
+            user.getKbBoards().remove(board);
+            userService.update(user);
+            return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"删除用户成功");
+        }catch (Exception e){
+            log.debug(e.getMessage());
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
+        }
     }
 }

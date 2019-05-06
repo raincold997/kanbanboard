@@ -3,6 +3,7 @@ package com.edu.nju.kanbanboard.web;
 import com.edu.nju.kanbanboard.comm.aop.LoggerManager;
 import com.edu.nju.kanbanboard.model.domain.KBBoard;
 import com.edu.nju.kanbanboard.model.domain.KBColumn;
+import com.edu.nju.kanbanboard.model.dto.ColumnInfoDto;
 import com.edu.nju.kanbanboard.model.dto.JsonResult;
 import com.edu.nju.kanbanboard.model.enums.ResultCodeEnum;
 import com.edu.nju.kanbanboard.service.BoardService;
@@ -78,5 +79,23 @@ public class ColumnController {
         }
         columnService.moveColumns(columnList);
         return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"移动列成功");
+    }
+
+    @PutMapping("/modify/{columnId}/{userId}")
+    @LoggerManager(description = "修改列基础信息")
+    public JsonResult modifyInfo(@PathVariable("columnId")Long columnId,@PathVariable("userId")Long userId,@RequestBody ColumnInfoDto columnInfoDto){
+        KBColumn modifyColumn = columnService.getById(columnId);
+        if(modifyColumn == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"列不存在");
+        }
+        try{
+            modifyColumn.setColumnName(columnInfoDto.getColumnName());
+            modifyColumn.setColumnWIP(columnInfoDto.getColumnWip());
+            columnService.update(modifyColumn);
+            return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"修改列基础信息成功");
+        }catch (Exception e){
+            log.debug(e.getMessage());
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
+        }
     }
 }

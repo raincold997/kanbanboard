@@ -11,5 +11,5 @@ public interface CardService {
 
     void deleteCard(Long cardId);
 
-
+    void moidfyCard(KBCard cardInfo,KBCard modifyCard);
 }
