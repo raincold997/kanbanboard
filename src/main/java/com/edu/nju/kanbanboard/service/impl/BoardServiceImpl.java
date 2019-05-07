@@ -48,7 +48,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public KBBoard findById(Long boardId) {
-        return null;
+        return boardRepository.getOne(boardId);
     }
 
     @Override
