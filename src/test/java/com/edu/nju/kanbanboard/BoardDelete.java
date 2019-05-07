@@ -25,17 +25,17 @@ public class BoardDelete {
     @Test
     public void OwnerBoard(){
 
-        KBBoard board = boardRepository.getOne(Long.parseLong("1"));
-        KBUser user = userRepository.getOne(Long.parseLong("1"));
-        List<KBBoard> newBoards = new ArrayList<>();
-        for(KBBoard sboard:user.getKbBoards()){
-            if(sboard.getBoardId().intValue() != 1){
-                newBoards.add(sboard);
-            }
-        }
-
-        user.setKbBoards(newBoards);
-        userRepository.save(user);
-        boardRepository.delete(board);
+//        KBBoard board = boardRepository.getOne(Long.parseLong("1"));
+//        KBUser user = userRepository.getOne(Long.parseLong("1"));
+//        List<KBBoard> newBoards = new ArrayList<>();
+//        for(KBBoard sboard:user.getKbBoards()){
+//            if(sboard.getBoardId().intValue() != 1){
+//                newBoards.add(sboard);
+//            }
+//        }
+//
+//        user.setKbBoards(newBoards);
+//        userRepository.save(user);
+//        boardRepository.delete(board);
     }
 }

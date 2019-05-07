@@ -7,10 +7,7 @@ import org.hibernate.annotations.Proxy;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -24,7 +21,7 @@ public class KBBoard implements Serializable {
     private Long boardId;
 
     @OneToMany(mappedBy = "kbBoard",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Set<KBColumn> columns = new HashSet<>();
+    private Set<KBColumn> columns = new TreeSet<>();
 
     @ManyToMany( mappedBy = "kbBoards")
     @JsonIgnore

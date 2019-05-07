@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name="kb_column")
 @Proxy(lazy = false)
-public class KBColumn implements Serializable {
+public class KBColumn implements Serializable,Comparable<KBColumn> {
 
     private static final long serialVersionUID = -1531781243773680003L;
 
@@ -55,5 +55,11 @@ public class KBColumn implements Serializable {
         KBColumn that = (KBColumn)x;
 
         return this.columnId.equals(that.columnId);
+    }
+
+
+    @Override
+    public int compareTo(KBColumn o) {
+        return this.columnOrder-o.columnOrder;
     }
 }
