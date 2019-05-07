@@ -4,6 +4,7 @@ import com.edu.nju.kanbanboard.model.domain.KBBoard;
 import com.edu.nju.kanbanboard.model.domain.KBUser;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -17,7 +18,7 @@ public interface UserService {
 
     void update(KBUser user);
 
-    List<KBBoard> getBoardList(Long userId);
+    Set<KBBoard> getBoardList(Long userId);
 
     void deleteBoard(Long userId,Long boardId);
 

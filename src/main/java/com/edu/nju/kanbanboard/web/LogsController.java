@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/kanbans/Logs")
@@ -36,7 +37,7 @@ public class LogsController {
         if(board == null){
             return null;
         }
-        List<KBLogs> logs = logsService.getLogsByBoard(boardId);
+        Set<KBLogs> logs = logsService.getLogsByBoard(boardId);
         List<LogsDto> logsDtoList = new ArrayList<>();
         if(logs.size() >0){
             for(KBLogs log:logs){

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ColumnServiceImpl implements ColumnService {
@@ -40,7 +41,7 @@ public class ColumnServiceImpl implements ColumnService {
     }
 
     @Override
-    public List<KBColumn> resortColumn(List<KBColumn> columns, int order) {
+    public Set<KBColumn> resortColumn(Set<KBColumn> columns, int order) {
         int flag = order<0 ? -1:1;
         order = Math.abs(order);
 

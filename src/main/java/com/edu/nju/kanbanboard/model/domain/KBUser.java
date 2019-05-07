@@ -10,7 +10,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -47,5 +49,5 @@ public class KBUser implements Serializable {
     @JoinTable(name = "kb_user_board",
             joinColumns = {@JoinColumn(name = "user_id",nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "board_id",nullable = false)})
-    private List<KBBoard> kbBoards = new ArrayList<>();
+    private Set<KBBoard> kbBoards = new HashSet<>();
 }

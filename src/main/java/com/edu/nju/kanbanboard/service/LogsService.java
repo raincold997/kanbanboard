@@ -3,9 +3,10 @@ package com.edu.nju.kanbanboard.service;
 import com.edu.nju.kanbanboard.model.domain.KBLogs;
 
 import java.util.List;
+import java.util.Set;
 
 public interface LogsService {
-    List<KBLogs> getLogsByBoard(Long BoardId);
+    Set<KBLogs> getLogsByBoard(Long BoardId);
 
     void createCardLog(Long userId,Long boardId,String cardTitle);
 

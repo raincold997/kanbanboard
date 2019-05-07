@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<KBBoard> getBoardList(Long userId) {
+    public Set<KBBoard> getBoardList(Long userId) {
         KBUser user = userRepository.getOne(userId);
         if(user != null){
             return user.getKbBoards();
@@ -52,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteBoard(Long userId, Long boardId) {
         KBUser user = userRepository.getOne(userId);
-        List<KBBoard> newBoards = new ArrayList<>();
+        Set<KBBoard> newBoards = new HashSet<>();
         for(KBBoard board:user.getKbBoards()){
             if(!board.getBoardId().equals(boardId)){
                 newBoards.add(board);

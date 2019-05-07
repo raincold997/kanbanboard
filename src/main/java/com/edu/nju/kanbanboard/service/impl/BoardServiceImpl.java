@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -21,7 +22,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void create(KBBoard board) {
-        List<KBColumn> columns = board.getColumns();
+        Set<KBColumn> columns = board.getColumns();
         int columnOrder = 1;
         if(columns.size()>0) {
             for (KBColumn column : columns) {
@@ -58,7 +59,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<KBBoard> getByOwnerId(Long ownerId) {
+    public Set<KBBoard> getByOwnerId(Long ownerId) {
         return boardRepository.findAllByOwnerId(ownerId);
     }
 

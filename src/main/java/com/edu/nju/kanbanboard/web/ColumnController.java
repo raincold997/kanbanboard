@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -57,7 +58,7 @@ public class ColumnController {
         }
         try{
             KBBoard board = deleteColumn.getKbBoard();
-            List<KBColumn> columnList = board.getColumns();
+            Set<KBColumn> columnList = board.getColumns();
             columnList.remove(deleteColumn);
             columnList = columnService.resortColumn(columnList,0-deleteColumn.getColumnOrder());
             board.setColumns(columnList);

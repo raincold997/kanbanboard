@@ -8,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -22,11 +24,11 @@ public class KBBoard implements Serializable {
     private Long boardId;
 
     @OneToMany(mappedBy = "kbBoard",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<KBColumn> columns = new ArrayList<>();
+    private Set<KBColumn> columns = new HashSet<>();
 
     @ManyToMany( mappedBy = "kbBoards")
     @JsonIgnore
-    private List<KBUser> kbUsers = new ArrayList<>();
+    private Set<KBUser> kbUsers = new HashSet<>();
 
     private Long ownerId;
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,7 +31,7 @@ public class BoardController {
     @GetMapping("/owner/{ownerId}")
     @LoggerManager(description = "获取OWNER看板")
     public Map<Long,String> getBoardListByOwner(@PathVariable("ownerId") Long ownerId){
-        List<KBBoard> boardList ;
+        Set<KBBoard> boardList ;
         Map<Long,String> ownerBoardMap;
         try {
             boardList = boardService.getByOwnerId(ownerId);
@@ -48,8 +49,8 @@ public class BoardController {
     @GetMapping("/user/{userId}")
     @LoggerManager(description = "获取USER看板")
     public Map<Long,String> getBoardListByUser(@PathVariable("userId") Long userId) {
-        List<KBBoard> ownerBoards = boardService.getByOwnerId(userId);
-        List<KBBoard> userBoards = userService.getBoardList(userId);
+        Set<KBBoard> ownerBoards = boardService.getByOwnerId(userId);
+        Set<KBBoard> userBoards = userService.getBoardList(userId);
         if (ownerBoards != null && ownerBoards.size() != 0 && userBoards != null) {
             userBoards.removeAll(ownerBoards);
         }

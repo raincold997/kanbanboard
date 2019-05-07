@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class LogsServiceImpl implements LogsService {
@@ -14,7 +15,7 @@ public class LogsServiceImpl implements LogsService {
     private LogsRepository logsRepository;
 
     @Override
-    public List<KBLogs> getLogsByBoard(Long BoardId) {
+    public Set<KBLogs> getLogsByBoard(Long BoardId) {
         return logsRepository.findAllByBoardId(BoardId);
     }
 

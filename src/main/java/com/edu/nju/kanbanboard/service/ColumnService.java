@@ -4,6 +4,7 @@ import com.edu.nju.kanbanboard.model.domain.KBColumn;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ColumnService {
     void create(KBColumn column);
@@ -14,7 +15,7 @@ public interface ColumnService {
 
     void delete(Long columnId);
 
-    List<KBColumn> resortColumn(List<KBColumn> columns,int order);
+    Set<KBColumn> resortColumn(Set<KBColumn> columns, int order);
 
     void moveColumns(List<Long> orderList);
 

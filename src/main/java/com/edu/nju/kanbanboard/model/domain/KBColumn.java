@@ -8,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -37,7 +39,7 @@ public class KBColumn implements Serializable {
     private KBBoard kbBoard;
 
     @OneToMany(mappedBy = "kbColumn",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<KBCard> cards = new ArrayList<>();
+    private Set<KBCard> cards = new HashSet<>();
 
     @JsonIgnore
     private int columnFlag;

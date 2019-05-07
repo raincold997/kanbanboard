@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -79,7 +80,7 @@ public class CardController {
         KBColumn targetColumn = columnService.getById(moveActionDto.getTargetLaneId());
         KBCard moveCard = cardService.getById(moveActionDto.getCardId());
         if(board != null && sourceColumn!=null && targetColumn != null){
-            List<KBColumn> columns = board.getColumns();
+            Set<KBColumn> columns = board.getColumns();
             if(columns.contains(sourceColumn)&&columns.contains(targetColumn)){
                 if(sourceColumn.getCards().contains(moveCard)){
                     if(!moveActionDto.getVersion().before(moveCard.getUpdateDate())){
