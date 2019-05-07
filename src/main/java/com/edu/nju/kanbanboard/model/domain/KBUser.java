@@ -1,6 +1,7 @@
 package com.edu.nju.kanbanboard.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.annotations.Proxy;
 
@@ -27,12 +28,20 @@ public class KBUser implements Serializable {
     private String userName;
 
     @NotBlank(message = "密码不能为空")
-    @JsonIgnore
     private String userPass;
 
     @NotBlank(message = "邮箱不能为空")
     @Email(message = "邮箱格式不正确")
     private String userEmail;
+
+    @JsonIgnore
+    public String getUserPass() {
+        return userPass;
+    }
+
+    public void setUserPass(String userPass) {
+        this.userPass = userPass;
+    }
 
     @ManyToMany( cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinTable(name = "kb_user_board",

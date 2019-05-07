@@ -27,6 +27,5 @@ public class KBLogs implements Serializable {
     private String logContent;
 
     @CreatedDate
-    @JsonIgnore
     private Date logCreated;
 }
