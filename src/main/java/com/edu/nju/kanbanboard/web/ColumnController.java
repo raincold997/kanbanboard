@@ -73,7 +73,7 @@ public class ColumnController {
 
     @PutMapping("/move/{kanbanId}")
     @LoggerManager(description = "移动列")
-    public JsonResult moveColumn(@PathVariable("kanbanId")Long boardId,List<Long> columnList){
+    public JsonResult moveColumn(@PathVariable("kanbanId")Long boardId,@RequestBody List<Long> columnList){
         KBBoard board = boardService.findById(boardId);
         if(board == null){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
