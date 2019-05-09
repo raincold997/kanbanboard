@@ -27,9 +27,9 @@ public class ColumnController {
     @Autowired
     private BoardService boardService;
 
-    @PostMapping("/create/{boardId}}")
+    @PostMapping("/create/{boardId}")
     @LoggerManager(description = "创建列")
-    public JsonResult createColumn(@PathVariable("boardId")Long boardId, @Valid KBColumn column, BindingResult bindingResult){
+    public JsonResult createColumn(@PathVariable("boardId")Long boardId, @Valid @RequestBody KBColumn column, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),bindingResult.getAllErrors().get(0).getDefaultMessage());
         }

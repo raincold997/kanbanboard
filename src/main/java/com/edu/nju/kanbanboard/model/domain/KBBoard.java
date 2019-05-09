@@ -21,7 +21,7 @@ public class KBBoard implements Serializable {
     private Long boardId;
 
     @OneToMany(mappedBy = "kbBoard",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Set<KBColumn> columns = new TreeSet<>();
+    private Set<KBColumn> columns = new HashSet<>();
 
     @ManyToMany( mappedBy = "kbBoards")
     @JsonIgnore

@@ -41,6 +41,7 @@ public class KBUser implements Serializable {
         return userPass;
     }
 
+    @JsonProperty
     public void setUserPass(String userPass) {
         this.userPass = userPass;
     }

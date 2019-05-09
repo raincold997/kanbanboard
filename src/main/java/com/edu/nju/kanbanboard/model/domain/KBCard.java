@@ -40,6 +40,15 @@ public class KBCard implements Serializable {
     //创建者姓名，用于卡片展示
     private String creatorName;
 
+    //创建日期
+    private Date createDate;
+
+    //结束日期
+    private Date finishDate;
+
+    //前置时间，单位为天
+    private int leadTime;
+
     //更新日期
     private Date updateDate;
 
@@ -53,6 +62,11 @@ public class KBCard implements Serializable {
     @Max(9)
     @Min(1)
     private int scale;
+
+    //工作进度，0~9
+    @Max(9)
+    @Min(0)
+    private int rate;
 
     @Override
     public boolean equals(Object x){

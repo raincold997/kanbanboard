@@ -16,4 +16,7 @@ public class MoveActionDto {
 
     private Date version;
 
+    //0 unfinished    1 finished
+    private int isFinish;
+
 }

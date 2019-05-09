@@ -37,35 +37,35 @@ public class ManytoOneTest {
 //
 //        boardRepository.save(board);
         //columnRepository.save(column);
-        Long boardId  = new Long("6");
-        KBBoard board = boardRepository.getOne(boardId);
-        System.out.println(board.getColumns().size());
+//        Long boardId  = new Long("6");
+//        KBBoard board = boardRepository.getOne(boardId);
+//        System.out.println(board.getColumns().size());
     }
 
     @Test
     public void addColumn(){
-        Long boardId  = new Long("6");
-        KBBoard board = boardRepository.getOne(boardId);
-
-        KBColumn column = new KBColumn();
-        column.setColumnName("test");
-        column.setKbBoard(board);
-        board.getColumns().add(column);
-        boardRepository.save(board);
+//        Long boardId  = new Long("6");
+//        KBBoard board = boardRepository.getOne(boardId);
+//
+//        KBColumn column = new KBColumn();
+//        column.setColumnName("test");
+//        column.setKbBoard(board);
+//        board.getColumns().add(column);
+//        boardRepository.save(board);
     }
 
     @Test
     public void addCard(){
-        Long columnId = new Long("5");
-        KBColumn column = columnRepository.getOne(columnId);
-
-        KBCard card = new KBCard();
-        card.setCardTitle("cardTest");
-        card.setCardDescription("kk");
-        card.setScale(1);
-        card.setKbColumn(column);
-        column.getCards().add(card);
-        columnRepository.save(column);
+//        Long columnId = new Long("5");
+//        KBColumn column = columnRepository.getOne(columnId);
+//
+//        KBCard card = new KBCard();
+//        card.setCardTitle("cardTest");
+//        card.setCardDescription("kk");
+//        card.setScale(1);
+//        card.setKbColumn(column);
+//        column.getCards().add(card);
+//        columnRepository.save(column);
     }
 
 
