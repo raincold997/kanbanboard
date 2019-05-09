@@ -15,4 +15,6 @@ public interface LogsService {
     void modifyCardLog(Long userId,Long boardId,String cardTitle);
 
     void moveCardLog(Long userId,Long boardId,String cardTitle,String sourceColumn,String targetColumn);
+
+    void finishCardLog(Long userId,Long boardId,String cardTitle);
 }

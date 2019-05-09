@@ -17,6 +17,7 @@ public class CardServiceImpl implements CardService {
     public void create(KBCard card) {
         card.setRate(0);
         card.setIsBlocked(0);
+        card.setCreateDate(new Date());
         card.setUpdateDate(new Date());
         cardRepository.save(card);
     }
@@ -49,6 +50,14 @@ public class CardServiceImpl implements CardService {
         modifyCard.setScale(cardInfo.getScale());
         modifyCard.setIsBlocked(0);
         update(modifyCard);
+    }
+
+    @Override
+    public void finishCard(KBCard card) {
+        card.setFinishDate(new Date());
+        int leadTime = (int)(card.getFinishDate().getTime()-card.getCreateDate().getTime())/(1000*3600*24);
+        card.setLeadTime(leadTime);
+        update(card);
     }
 
 

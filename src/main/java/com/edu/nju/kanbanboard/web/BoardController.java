@@ -2,6 +2,7 @@ package com.edu.nju.kanbanboard.web;
 
 import com.edu.nju.kanbanboard.comm.aop.LoggerManager;
 import com.edu.nju.kanbanboard.model.domain.KBBoard;
+import com.edu.nju.kanbanboard.model.domain.KBCard;
 import com.edu.nju.kanbanboard.model.domain.KBColorList;
 import com.edu.nju.kanbanboard.model.domain.KBUser;
 import com.edu.nju.kanbanboard.model.dto.JsonResult;
@@ -197,5 +198,33 @@ public class BoardController {
             log.debug(e.getMessage());
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"发生了错误");
         }
+    }
+
+    @GetMapping("/leadTime/{kanbanId}")
+    @LoggerManager(description = "获取平均前置时间")
+    public JsonResult getLeadTime(@PathVariable("kanbanId")Long boardId){
+        KBBoard board = boardService.findById(boardId);
+        if(board == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
+        }
+        String leadTimeMessage = boardService.getLeadTime(board);
+        if(leadTimeMessage.equals("-1")){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"错误，无结束列");
+        }
+        if(leadTimeMessage.equals("-2")){
+            return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"暂无已完成工作项","暂无已完成工作项");
+        }
+        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"获取成功",leadTimeMessage);
+    }
+
+    @GetMapping("/throughput/{kanbanId}")
+    @LoggerManager(description = "获取一周吞吐量")
+    public JsonResult getThroughput(@PathVariable("kanbanId")Long boardId){
+        KBBoard board = boardService.findById(boardId);
+        if(board ==  null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
+        }
+        List<String> throughput = boardService.getThroughputOneWeek(board);
+        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"获取吞吐量成功",throughput);
     }
 }

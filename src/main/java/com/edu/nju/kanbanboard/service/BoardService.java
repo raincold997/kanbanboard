@@ -24,4 +24,8 @@ public interface BoardService {
     Long getOwnerId(Long boardId);
 
     void updateColorList(KBColorList colorList);
+
+    String getLeadTime(KBBoard board);
+
+    List<String> getThroughputOneWeek(KBBoard board);
 }

@@ -84,9 +84,15 @@ public class CardController {
             if(columns.contains(sourceColumn)&&columns.contains(targetColumn)){
                 if(sourceColumn.getCards().contains(moveCard)){
                     if(!moveActionDto.getVersion().before(moveCard.getUpdateDate())){
-                        moveCard.setKbColumn(targetColumn);
-                        cardService.update(moveCard);
-                        logsService.moveCardLog(moveActionDto.getUserId(),boardId,moveCard.getCardTitle(),sourceColumn.getColumnName(),targetColumn.getColumnName());
+                        if(moveActionDto.getIsFinish() == 0) {
+                            moveCard.setKbColumn(targetColumn);
+                            cardService.update(moveCard);
+                            logsService.moveCardLog(moveActionDto.getUserId(), boardId, moveCard.getCardTitle(), sourceColumn.getColumnName(), targetColumn.getColumnName());
+                        }else{
+                            moveCard.setKbColumn(targetColumn);
+                            cardService.finishCard(moveCard);
+                            logsService.finishCardLog(moveActionDto.getUserId(),boardId,moveCard.getCardTitle());
+                        }
                         return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"移动成功");
                     }
                     return new JsonResult(ResultCodeEnum.FAIL.getCode(),"已经有人修改了这张卡片");

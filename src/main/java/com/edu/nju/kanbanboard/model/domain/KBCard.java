@@ -52,7 +52,7 @@ public class KBCard implements Serializable {
     //更新日期
     private Date updateDate;
 
-    //是否阻塞,更新日期超过2日没有被完成
+    //是否阻塞,更新日期超过2日没有被修改
     private int isBlocked;
 
     //工作截至日期

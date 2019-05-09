@@ -43,6 +43,12 @@ public class LogsServiceImpl implements LogsService {
         saveLog(content,userId,boardId);
     }
 
+    @Override
+    public void finishCardLog(Long userId, Long boardId, String cardTitle) {
+        String content = cardTitle+" 工作项完成";
+        saveLog(content,userId,boardId);
+    }
+
     private void saveLog(String content,Long userId,Long boardId){
         KBLogs logs = new KBLogs();
         logs.setBoardId(boardId);
