@@ -5,7 +5,9 @@ import com.edu.nju.kanbanboard.model.domain.KBBoard;
 import com.edu.nju.kanbanboard.model.domain.KBCard;
 import com.edu.nju.kanbanboard.model.domain.KBColorList;
 import com.edu.nju.kanbanboard.model.domain.KBUser;
+import com.edu.nju.kanbanboard.model.dto.BoardUserDto;
 import com.edu.nju.kanbanboard.model.dto.JsonResult;
+import com.edu.nju.kanbanboard.model.dto.StatisticsInfoDto;
 import com.edu.nju.kanbanboard.model.enums.ResultCodeEnum;
 import com.edu.nju.kanbanboard.service.BoardService;
 import com.edu.nju.kanbanboard.service.UserService;
@@ -200,6 +202,17 @@ public class BoardController {
         }
     }
 
+    @GetMapping("/user/{kanbanId}")
+    @LoggerManager(description = "获取看板用户列表")
+    public JsonResult getUserList(@PathVariable("kanbanId")Long boardId){
+        KBBoard board = boardService.findById(boardId);
+        if(board == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"对应看板不存在");
+        }
+        List<BoardUserDto> boardUserDtos = boardService.getUserList(board);
+        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"获取成功",boardUserDtos);
+    }
+
     @GetMapping("/leadTime/{kanbanId}")
     @LoggerManager(description = "获取平均前置时间")
     public JsonResult getLeadTime(@PathVariable("kanbanId")Long boardId){
@@ -226,5 +239,16 @@ public class BoardController {
         }
         List<String> throughput = boardService.getThroughputOneWeek(board);
         return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"获取吞吐量成功",throughput);
+    }
+
+    @GetMapping("/statisticsInfo/{kanbanId}")
+    @LoggerManager(description = "获取看板统计信息")
+    public JsonResult getStaticsInfo(@PathVariable("kanbanId")Long boardId){
+        KBBoard board = boardService.findById(boardId);
+        if(board ==  null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
+        }
+        List<StatisticsInfoDto> statisticsInfos = boardService.getStatisticsInfo(board);
+        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"获取成功",statisticsInfos);
     }
 }

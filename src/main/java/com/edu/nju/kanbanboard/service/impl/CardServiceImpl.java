@@ -48,7 +48,8 @@ public class CardServiceImpl implements CardService {
         modifyCard.setCardDescription(cardInfo.getCardDescription());
         modifyCard.setColor(cardInfo.getColor());
         modifyCard.setScale(cardInfo.getScale());
-        modifyCard.setIsBlocked(0);
+        modifyCard.setRate(cardInfo.getRate());
+        //modifyCard.setIsBlocked(0);
         update(modifyCard);
     }
 

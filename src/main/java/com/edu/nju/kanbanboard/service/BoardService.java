@@ -2,6 +2,8 @@ package com.edu.nju.kanbanboard.service;
 
 import com.edu.nju.kanbanboard.model.domain.KBBoard;
 import com.edu.nju.kanbanboard.model.domain.KBColorList;
+import com.edu.nju.kanbanboard.model.dto.BoardUserDto;
+import com.edu.nju.kanbanboard.model.dto.StatisticsInfoDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +30,8 @@ public interface BoardService {
     String getLeadTime(KBBoard board);
 
     List<String> getThroughputOneWeek(KBBoard board);
+
+    List<StatisticsInfoDto> getStatisticsInfo(KBBoard board);
+
+    List<BoardUserDto> getUserList(KBBoard board);
 }

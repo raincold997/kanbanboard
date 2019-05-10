@@ -1,19 +1,20 @@
 package com.edu.nju.kanbanboard.service.impl;
 
-import com.edu.nju.kanbanboard.model.domain.KBBoard;
-import com.edu.nju.kanbanboard.model.domain.KBCard;
-import com.edu.nju.kanbanboard.model.domain.KBColorList;
-import com.edu.nju.kanbanboard.model.domain.KBColumn;
+import com.edu.nju.kanbanboard.model.domain.*;
+import com.edu.nju.kanbanboard.model.dto.BoardUserDto;
+import com.edu.nju.kanbanboard.model.dto.StatisticsInfoDto;
 import com.edu.nju.kanbanboard.repository.BoardRepository;
 import com.edu.nju.kanbanboard.repository.ColorListRepository;
 import com.edu.nju.kanbanboard.service.BoardService;
 import com.edu.nju.kanbanboard.utils.Arith;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class BoardServiceImpl implements BoardService {
     @Autowired
@@ -116,6 +117,45 @@ public class BoardServiceImpl implements BoardService {
             }
         }
         return throughPut;
+    }
+
+    @Override
+    public List<StatisticsInfoDto> getStatisticsInfo(KBBoard board) {
+        KBColumn finishColumn = getFinishColumn(board);
+        List<StatisticsInfoDto> sids = new ArrayList<>();
+        if(finishColumn != null){
+            Set<KBCard> cards = finishColumn.getCards();
+            for(KBCard card:cards){
+                if(card.getFinishDate() != null){
+                    StatisticsInfoDto sid = new StatisticsInfoDto();
+                    sid.setCardTitle(card.getCardTitle());
+                    sid.setFinishDate(card.getFinishDate());
+                    sid.setLeadTime(card.getLeadTime());
+                    sids.add(sid);
+                }else{
+                    log.debug("wrong card,check id: "+card.getCardId());
+                }
+            }
+        }
+        return sids;
+    }
+
+    @Override
+    public List<BoardUserDto> getUserList(KBBoard board) {
+        List<BoardUserDto> boardUsers = new ArrayList<>();
+        for(KBUser user:board.getKbUsers()){
+            BoardUserDto boardUser = new BoardUserDto();
+            boardUser.setUserId(user.getUserId());
+            boardUser.setUserName(user.getUserName());
+            boardUser.setUserEmail(user.getUserEmail());
+            if(board.getOwnerId().equals(user.getUserId())){
+                boardUser.setIsOwner(1);
+            }else {
+                boardUser.setIsOwner(0);
+            }
+            boardUsers.add(boardUser);
+        }
+        return boardUsers;
     }
 
     private KBColumn getFinishColumn(KBBoard board){
