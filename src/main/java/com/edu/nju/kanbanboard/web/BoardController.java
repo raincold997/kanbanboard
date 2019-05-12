@@ -202,7 +202,7 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/user/{kanbanId}")
+    @GetMapping("/user/userList/{kanbanId}")
     @LoggerManager(description = "获取看板用户列表")
     public JsonResult getUserList(@PathVariable("kanbanId")Long boardId){
         KBBoard board = boardService.findById(boardId);
