@@ -38,9 +38,13 @@ public class ColumnController {
             return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
         }
         try {
-            int newOrder = board.getColumns().size() + 1;
-            column.setColumnOrder(newOrder);
+            //int newOrder = board.getColumns().size() + 1;
+            //column.setColumnOrder(newOrder);
             column.setKbBoard(board);
+            Set<KBColumn> columns = board.getColumns();
+            columns = columnService.resortColumn(columns,column.getColumnOrder());
+            board.setColumns(columns);
+            boardService.update(board);
             columnService.create(column);
             return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"成功创建了列");
         }catch (Exception e){

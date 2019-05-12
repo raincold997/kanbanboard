@@ -49,14 +49,14 @@ public class BoardController {
         return null;
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/boardList/{userId}")
     @LoggerManager(description = "获取USER看板")
     public Map<Long,String> getBoardListByUser(@PathVariable("userId") Long userId) {
-        Set<KBBoard> ownerBoards = boardService.getByOwnerId(userId);
+        //Set<KBBoard> ownerBoards = boardService.getByOwnerId(userId);
         Set<KBBoard> userBoards = userService.getBoardList(userId);
-        if (ownerBoards != null && ownerBoards.size() != 0 && userBoards != null) {
-            userBoards.removeAll(ownerBoards);
-        }
+//        if (ownerBoards != null && ownerBoards.size() != 0 && userBoards != null) {
+//            userBoards.removeAll(ownerBoards);
+//        }
         if (userBoards != null && userBoards.size() != 0) {
             Map<Long, String> userBoardMap = userBoards.stream().collect(Collectors.toMap(KBBoard::getBoardId, KBBoard::getBoardName));
             return userBoardMap;
