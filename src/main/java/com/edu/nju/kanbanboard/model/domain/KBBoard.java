@@ -32,6 +32,8 @@ public class KBBoard implements Serializable {
     @NotBlank(message = "看板名称不能为空")
     private String boardName;
 
+    private Date createDate;
+
     @Override
     public boolean equals(Object x){
         if(this == x)return true;

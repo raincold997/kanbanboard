@@ -11,6 +11,7 @@ import com.edu.nju.kanbanboard.model.dto.StatisticsInfoDto;
 import com.edu.nju.kanbanboard.model.enums.ResultCodeEnum;
 import com.edu.nju.kanbanboard.service.BoardService;
 import com.edu.nju.kanbanboard.service.UserService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -239,6 +240,17 @@ public class BoardController {
         }
         List<String> throughput = boardService.getThroughputOneWeek(board);
         return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"获取吞吐量成功",throughput);
+    }
+
+    @GetMapping("/weekThroughput/{kanbanId}")
+    @LoggerManager(description = "获取每周吞吐量")
+    public JsonResult getWeekThroughput(@PathVariable("kanbanId")Long boardId){
+        KBBoard board =boardService.findById(boardId);
+        if(board == null){
+            return new JsonResult(ResultCodeEnum.FAIL.getCode(),"看板不存在");
+        }
+        List<String> weekThroughput = boardService.getWeeksThroughput(board);
+        return new JsonResult(ResultCodeEnum.SUCCESS.getCode(),"获取吞吐量成功",weekThroughput);
     }
 
     @GetMapping("/statisticsInfo/{kanbanId}")

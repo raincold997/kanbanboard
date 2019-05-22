@@ -24,6 +24,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void create(KBBoard board) {
+        board.setCreateDate(new Date());
         Set<KBColumn> columns = board.getColumns();
         int columnOrder = 1;
         if(columns.size()>0) {
@@ -35,6 +36,7 @@ public class BoardServiceImpl implements BoardService {
                 columnOrder++;
             }
         }
+        board.setColumns(columns);
         boardRepository.save(board);
         KBColorList colorList = new KBColorList();
         colorList.setBoardId(board.getBoardId());
@@ -156,6 +158,38 @@ public class BoardServiceImpl implements BoardService {
             boardUsers.add(boardUser);
         }
         return boardUsers;
+    }
+
+    @Override
+    public List<String> getWeeksThroughput(KBBoard board) {
+        KBColumn finishColumn = getFinishColumn(board);
+        List<String> weeksThroughput = new ArrayList<>();
+        if(finishColumn != null){
+            Set<KBCard> cards = finishColumn.getCards();
+            //一周开始时间
+            Calendar startC = Calendar.getInstance();
+            startC.setTime(board.getCreateDate());
+            //一周结束时间
+            Calendar endC = Calendar.getInstance();
+            endC.setTime(board.getCreateDate());
+            endC.add(Calendar.DATE,7);
+            //现在时间，循环结束条件
+            Date endDate = new Date();
+            //开始时间超过现在时间，结束循环
+            while(startC.getTime().before(endDate)){
+                int throuthput = 0;
+                for(KBCard card:cards){
+                    //晚于开始时间，早于结束时间，吞吐量加一
+                    if(card.getFinishDate().after(startC.getTime())&&card.getFinishDate().before(endC.getTime())){
+                        throuthput ++;
+                    }
+                }
+                weeksThroughput.add(String.valueOf(throuthput));
+                startC.add(Calendar.DATE,7);
+                endC.add(Calendar.DATE,7);
+            }
+        }
+        return weeksThroughput;
     }
 
     private KBColumn getFinishColumn(KBBoard board){

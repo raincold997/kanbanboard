@@ -34,4 +34,6 @@ public interface BoardService {
     List<StatisticsInfoDto> getStatisticsInfo(KBBoard board);
 
     List<BoardUserDto> getUserList(KBBoard board);
+
+    List<String> getWeeksThroughput(KBBoard board);
 }
